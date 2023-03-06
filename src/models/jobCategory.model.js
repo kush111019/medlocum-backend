@@ -25,3 +25,5 @@ jobCategoriesSchema.plugin(toJSON);
 const JobCategory = mongoose.model(schemaNames.JOB_CATEGORIES, jobCategoriesSchema);
 
 module.exports = JobCategory;
+
+//nik
