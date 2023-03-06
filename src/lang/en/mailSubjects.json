@@ -1,0 +1,12 @@
+{
+  "admin": {
+    "resetPasswordEmail": "PRODUCT_NAME - Forgot Password Request",
+    "passwordChangeEmail": "PRODUCT_NAME - You have got yourself a new password",
+    "onBoardWelcomeEmail": "Congrats! You are successfully registered with PRODUCT_NAME"
+  },
+  "webApp": {
+    "resetPasswordEmail": "PRODUCT_NAME - Forgot Password Request",
+    "passwordChangeEmail": "PRODUCT_NAME - You have got yourself a new password",
+    "onBoardWelcomeEmail": "Congrats! You are successfully registered with PRODUCT_NAME"
+  }
+}
