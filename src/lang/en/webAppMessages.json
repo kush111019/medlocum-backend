@@ -3,5 +3,40 @@
     "success": "Success",
     "invalidRequest": "Invalid request, Please reload the page and try again.",
     "serverError": "An unexpected error has occured. To solve the issue, contact the person responsible for your Server."
+  },
+  "authMessage": {
+    "authFail": "Your authentication failed.",
+    "accountNotVerified": "Your account has been not verified.",
+    "accountEmailNotVerified": "Please verify your email first.",
+    "accountNotActivated": "Your account has been not activated.",
+    "accountDeleted": "Your account has been deleted.",
+
+    "invalidCaptcha": "Please complete captcha verification.",
+
+    "loginSuccessfully": "Logged in successfully.",
+    "loginUnsuccessfully": "Email or password is  incorrect.",
+
+    "logoutSuccessfully": "Logged out successfully.",
+    "logoutUnsuuccessfully": "Something went wrong when logout.",
+
+    "tokenNotFound": "Token not found.",
+
+    "refreshTokenNotFound": "Token not found.",
+    "refreshTokenException": "Invalid request, Your token has expired.",
+    "refreshTokenUnAuthenticate": "Sorry, your request could not be processed.",
+
+    "forgotPasswordUserNotFound": "No users found with this email.",
+    "resetPasswordEmailSuccess": "We have sent an link to your email address.",
+    "resetPasswordUserNotFound": "Invalid request, User not found.",
+    "resetPasswordFailed": "Invalid request, Password reset failed.",
+    "resetPasswordSuccess": "Your password has been reset successfully.",
+    "resendMailSuccess": "We have resend you a verification email link to your registred email",
+
+    "userEmailAlreadyTaken": "Email already taken.",
+    "verifyEmailUserNotFound": "Invalid request, User information not found.",
+    "userVerifyEmailTimeExecption": "Invalid request, Your token has been expired.",
+    "userEmailVerifySuccess": "Your account email has been verified successfully.",
+    "changePasswordSuccess": "Your password has been changed",
+    "accountDeactivated": "Your account has been deactivated by the admin. Please contact support for assistance."
   }
 }

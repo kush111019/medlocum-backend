@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { User } = require('../../../models');
+const { User, UserDetail } = require('../../../models');
 const ApiError = require('../../../utils/ApiError');
 
 /**
@@ -11,7 +11,18 @@ const createUser = async (userBody) => {
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
-  return User.create(userBody);
+  const { email, mobileNumber, password, role } = userBody;
+  const userObj = { email, mobileNumber, password, role };
+
+  const userDetails = {
+    ...userBody.userDetails,
+  };
+
+  const user = await User.create(userObj);
+
+  const userDetail = await UserDetail.create({ ...userDetails, userId: user._id });
+
+  return { user, userDetail };
 };
 
 /**
@@ -43,7 +54,29 @@ const getUserById = async (id) => {
  * @returns {Promise<User>}
  */
 const getUserByEmail = async (email) => {
-  return User.findOne({ email });
+  const user = User.findOne({ email }).populate('userDetails');
+
+  // const data = await User.aggregate([
+  //   {
+  //     $match: {
+  //       email,
+  //     },
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: 'userdetails',
+  //       localField: '_id',
+  //       foreignField: 'userId',
+  //       as: 'userDetail',
+  //     },
+  //   },
+  //   {
+  //     $unwind: {
+  //       path: '$userDetail',
+  //     },
+  //   },
+  // ]);
+  return user;
 };
 
 /**

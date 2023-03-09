@@ -4,14 +4,70 @@ const { password } = require('./custom.validation');
 const register = {
   body: Joi.object().keys({
     email: Joi.string().required().email(),
+    mobileNumber: Joi.string().required(),
     password: Joi.string().required().custom(password),
-    name: Joi.string().required(),
+    role: Joi.string().required().valid('candidate', 'client'),
+    userDetails: Joi.object().keys({
+      title: Joi.string().required(),
+      firstName: Joi.string().required(),
+      lastName: Joi.string().required(),
+      businessName: Joi.when(Joi.ref('...role'), {
+        is: 'client',
+        then: Joi.string().required(),
+        otherwise: Joi.forbidden(),
+      }),
+      tradingName: Joi.when(Joi.ref('...role'), {
+        is: 'client',
+        then: Joi.string().required(),
+        otherwise: Joi.forbidden(),
+      }),
+      croNumber: Joi.when(Joi.ref('...role'), {
+        is: 'client',
+        then: Joi.string().required(),
+        otherwise: Joi.forbidden(),
+      }),
+      gender: Joi.when(Joi.ref('...role'), {
+        is: 'candidate',
+        then: Joi.string().required(),
+        otherwise: Joi.forbidden(),
+      }),
+
+      dob: Joi.when(Joi.ref('...role'), {
+        is: 'candidate',
+        then: Joi.string().required(),
+        otherwise: Joi.forbidden(),
+      }),
+      eirCode: Joi.string().required(),
+      nationality: Joi.string().required(),
+
+      invoiceAddress: Joi.when(Joi.ref('...role'), {
+        is: 'client',
+        then: Joi.string().required(),
+        otherwise: Joi.forbidden(),
+      }),
+      address: Joi.string().required(),
+      availability: Joi.when(Joi.ref('...role'), {
+        is: 'client',
+        then: Joi.string().required(),
+        otherwise: Joi.forbidden(),
+      }),
+      imcNumber: Joi.when(Joi.ref('...role'), {
+        is: 'candidate',
+        then: Joi.string().required(),
+        otherwise: Joi.forbidden(),
+      }),
+      psiNumber: Joi.when(Joi.ref('...role'), {
+        is: 'candidate',
+        then: Joi.string().required(),
+        otherwise: Joi.forbidden(),
+      }),
+    }),
   }),
 };
 
 const login = {
   body: Joi.object().keys({
-    email: Joi.string().required(),
+    email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),
 };

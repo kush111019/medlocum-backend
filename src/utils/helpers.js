@@ -8,21 +8,21 @@ const config = require('../config/config');
 const momentJsRange = extendMoment(momentJs);
 
 const adminMessagesEn = require('../lang/en/adminMessage.json');
-const appMessagesEn = require('../lang/en/webAppMessages.json');
+const webAppMessagesEn = require('../lang/en/webAppMessages.json');
 
 // Email subject
 const mailSubjectsEn = require('../lang/en/mailSubjects.json');
 
 const Log = require('../models/logs.model');
 
-const getAppMessages = (messageKey, lang = 'en') => {
+const getWebAppMessages = (messageKey, lang = 'en') => {
   let apiMessagesSource;
   if (lang === 'en') {
-    apiMessagesSource = appMessagesEn;
+    apiMessagesSource = webAppMessagesEn;
   } else if (lang === 'fr') {
-    apiMessagesSource = appMessagesEn;
+    apiMessagesSource = webAppMessagesEn;
   } else {
-    apiMessagesSource = appMessagesEn;
+    apiMessagesSource = webAppMessagesEn;
   }
 
   // split message key from DOT....
@@ -218,7 +218,7 @@ const getCurrentDateIsoStringWithZeroHourMinSecMilliSecond = () => {
 };
 
 module.exports = {
-  getAppMessages,
+  getWebAppMessages,
   getAdminMessages,
   getMailSubject,
   logResponse,

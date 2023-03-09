@@ -1,28 +1,49 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../../../utils/catchAsync');
 const { authService, userService, tokenService, emailService } = require('../../../services/v1/webApp');
+const utility = require('../../../utils/helpers');
 
 const register = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
-  const tokens = await tokenService.generateAuthTokens(user);
-  res.status(httpStatus.CREATED).send({ user, tokens });
+  // const tokens = await tokenService.generateAuthTokens(user);
+  res.status(httpStatus.CREATED).send({ ...user });
 });
 
 const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const user = await authService.loginUserWithEmailAndPassword(email, password);
   const tokens = await tokenService.generateAuthTokens(user);
-  res.send({ user, tokens });
+
+  const tempUserObj = user.toObject();
+
+  const finalObj = { result: { ...tempUserObj }, tokens };
+  delete finalObj.result.password;
+
+  res.sendJSONResponse({
+    code: httpStatus.OK,
+    status: true,
+    message: utility.getWebAppMessages('authMessage.loginSuccessfully'),
+    data: finalObj,
+  });
 });
 
 const logout = catchAsync(async (req, res) => {
   await authService.logout(req.body.refreshToken);
-  res.status(httpStatus.NO_CONTENT).send();
+  res.sendJSONResponse({
+    code: httpStatus.OK,
+    status: true,
+    message: utility.getWebAppMessages('authMessage.logoutSuccessfully'),
+  });
 });
 
 const refreshTokens = catchAsync(async (req, res) => {
   const tokens = await authService.refreshAuth(req.body.refreshToken);
-  res.send({ ...tokens });
+  res.sendJSONResponse({
+    code: httpStatus.OK,
+    status: true,
+    message: utility.getWebAppMessages('authMessage.logoutSuccessfully'),
+    data: tokens,
+  });
 });
 
 const forgotPassword = catchAsync(async (req, res) => {

@@ -27,28 +27,22 @@ const userDetailSchema = mongoose.Schema(
     },
     businessName: {
       type: String,
-      default: null,
       trim: true,
     },
     tradingName: {
       type: String,
-      default: null,
       trim: true,
     },
     croNumber: {
       type: String,
-      default: null,
       trim: true,
     },
     gender: {
       type: String,
-      default: null,
-      enum: ['male', 'female'],
       trim: true,
     },
-    dateDOB: {
-      type: Date,
-      default: null,
+    dob: {
+      type: String,
     },
     eirCode: {
       type: String,
@@ -62,7 +56,6 @@ const userDetailSchema = mongoose.Schema(
     },
     invoiceAddress: {
       type: String,
-      default: null,
       trim: true,
     },
     address: {
@@ -72,17 +65,14 @@ const userDetailSchema = mongoose.Schema(
     },
     availability: {
       type: String,
-      default: null,
       trim: true,
     },
     imcNumber: {
       type: String,
-      default: null,
       trim: true,
     },
     psiNumber: {
       type: String,
-      default: null,
       trim: true,
     },
   },

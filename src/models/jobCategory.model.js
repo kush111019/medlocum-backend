@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { toJSON } = require('./plugins');
-const schemaNames = require('../config/schemaNames');
+const { schemaNames } = require('../config/schemaNames');
 
 const jobCategoriesSchema = mongoose.Schema(
   {
@@ -25,5 +25,3 @@ jobCategoriesSchema.plugin(toJSON);
 const JobCategory = mongoose.model(schemaNames.JOB_CATEGORIES, jobCategoriesSchema);
 
 module.exports = JobCategory;
-
-//nik

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const { toJSON, paginate } = require('./plugins');
+const { toJSON } = require('./plugins');
 const { schemaNames } = require('../config/schemaNames');
 
 const userSchema = mongoose.Schema(
@@ -21,14 +21,6 @@ const userSchema = mongoose.Schema(
     mobileNumber: {
       type: String,
       required: true,
-      unique: true,
-      trim: true,
-      lowercase: true,
-      validate(value) {
-        if (!validator.isEmail(value)) {
-          throw new Error('Invalid email');
-        }
-      },
     },
     password: {
       type: String,
@@ -58,13 +50,21 @@ const userSchema = mongoose.Schema(
     },
   },
   {
+    collection: schemaNames.USER,
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      virtuals: true,
+    },
+    id: false,
   }
 );
 
 // add plugin that converts mongoose to json
 userSchema.plugin(toJSON);
-userSchema.plugin(paginate);
+// userSchema.plugin(paginate);
 
 /**
  * Check if email is taken
@@ -93,6 +93,13 @@ userSchema.pre('save', async function (next) {
     user.password = await bcrypt.hash(user.password, 8);
   }
   next();
+});
+
+// Getting user details from user
+userSchema.virtual('userDetails', {
+  ref: schemaNames.USER_DETAILS,
+  localField: '_id',
+  foreignField: 'userId',
 });
 
 /**
