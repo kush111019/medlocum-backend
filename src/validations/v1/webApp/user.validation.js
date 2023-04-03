@@ -45,10 +45,46 @@ const deleteUser = {
   }),
 };
 
+const createPrefrences = {
+  body: Joi.object().keys({
+    jobCategory: Joi.string().allow(null),
+    jobType: Joi.string().allow(null),
+    speciality: Joi.string().allow(null),
+    weekHours: Joi.string().allow(null),
+    salaryRange: Joi.object().keys({ min: Joi.number(), max: Joi.number() }),
+    salaryType: Joi.string().allow(null),
+    eirCode: Joi.string().allow(null),
+    isAvailForEmergency: Joi.boolean(),
+    isBlocking: Joi.boolean(),
+    availability: Joi.string().allow(null),
+    travelDistance: Joi.string().allow(null),
+  }),
+};
+
+const getSpecificJob={
+  query: Joi.object().keys({
+    jobId: Joi.string().custom(objectId),   
+
+  })
+
+};
+
+const getSpecificCandidate={
+
+  query: Joi.object().keys({
+    candidateId: Joi.string().custom(objectId),   
+
+  })
+
+}
+
 module.exports = {
   createUser,
   getUsers,
   getUser,
   updateUser,
   deleteUser,
+  createPrefrences,
+  getSpecificJob,
+  getSpecificCandidate,
 };

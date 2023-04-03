@@ -42,7 +42,44 @@
   "homePage":{
     "CandidateRecommendedJobSuccess": "recommended jobs send successfully",
     "CandidateRecommendedJobFailure": "recommended jobs send failed",
-    "ClientRecommendedCandidateSuccess": "recommended candidates send successfully",
-    "ClientRecommendedCandidateFailure": "recommended candidates send failed"
-  }
+    "CandidateRecommendedForClientSuccess": "recommended candidates send successfully",
+    "CandidateRecommendedForClientFailure": "recommended candidates send failed",
+    "ClientRecommendedForCandidateSuccess": "recommended clients send successfully",
+    "ClientRecommendedForCandidateFailure": "recommended clients send failed"
+  },
+
+  "jobMessage":{
+   
+    "jobCreatedSuccess": "job details created successfully",
+    "jobCreatedFailure": "job details are not created successfully",
+    "jobUpdateSuccess": "job updated successfully",
+    "jobUpdateFailure": "job updated failed",
+    "jobDeletedSuccess": "job deleted successfully",
+    "jobDeletedFailure": "job deleted failed",
+    "jobCategoryCreatedSuccess": "job category created successfully",
+    "jobCategoryCreatedFailure": "job category created successfully",
+    "jobCategoryUpdateSuccess": "job category updated successfully",
+    "jobCategoryUpdatedFailure": "job category updated failed",
+    "jobCategoryDeletedSuccess": "job category deleted successfully",
+    "jobCategoryDeletedFailure": "job category deleted failed",
+    "jobRequestCreatedSuccess": "job request created successfully",
+    "jobRequestCreatedFailure": "job request created failed",
+    "jobRequestUpdatedSuccess": "job request updated successfully",
+    "jobRequestUpdatedFailure": "job request updated failed",
+    "jobRequestDeletedSuccess": "job request deleted successfully",
+    "jobRequestDeletedFailure": "job request deleted failed",
+    "jobFilterSuccess": "job filter apply successfully",
+    "jobFilterFailure": "job filter failed",
+    "favouriteJobAddedSuccess": "favourite job created successfully",
+    "favouriteJobAddedFailure": "favourite job created failed",
+    "favouriteJobDeletedSuccess": "favourite job deleted successfully",
+    "favouriteJobDeletedFailure": "favourite job deleted failed",
+    "favouriteCandidateAddedSuccess": "favourite candidate added successfully",
+    "favouriteCandidateAddedFailure": "favourite candidate added failed",
+    "favouriteCandidateDeletedSuccess": "favourite candidate deleted successfully",
+    "favouriteCandidateDeletedFailure": "favourite candidate deleted failed",
+    "jobGetSuccess": "job Details are fetched successfully",
+    "specificUserGetSuccess": "specific user details are fetched successfully",
+    "specificJobGetSuccess": "specific job details are fetched successfully"
+    }
 }

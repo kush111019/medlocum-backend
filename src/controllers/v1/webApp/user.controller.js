@@ -81,7 +81,7 @@ const matchedCandidatesForClientHomePage=catchAsync(async(req,res)=>{
   
 //   code:httpStatus.OK,
 //   status: true,
-//   message: utility.getWebAppMessages('jobMessage.ClientRecommendedCandidateSuccess'),
+//   message: utility.getWebAppMessages('jobMessage.CandidateRecommendedForClientSuccess'),
 //   data: {result:data1}
 
 // })
@@ -98,7 +98,7 @@ const matchedClientsForCandidateHomePage=catchAsync(async(req,res)=>{
    
    code:httpStatus.OK,
    status: true,
-   message: utility.getWebAppMessages('jobMessage.ClientRecommendedCandidateSuccess'),
+   message: utility.getWebAppMessages('jobMessage.ClientRecommendedForCandidateSuccess'),
    data: {results:data1}
  
  })
@@ -106,6 +106,46 @@ const matchedClientsForCandidateHomePage=catchAsync(async(req,res)=>{
   
  
  })
+
+
+ const getSpecificCandidate=catchAsync(async (req,res)=>{
+
+  let user=req.user;
+  let objectId1=req.query.objectId;
+  
+  let data1=await userService.getSpecificCandidateDetails(objectId1);
+  
+  res.sendJSONResponse({
+    
+    code:httpStatus.OK,
+    status: true,
+    message:utility.getWebAppMessages('jobMessage.specificCandidateGetSuccess'),
+    data: {result:data1}
+  
+  })
+  
+  
+  })
+
+
+  const getSpecificJob = catchAsync(async (req, res) => {
+ 
+    let user=req.user;
+    let objectId1=req.query.objectId;
+  
+    let data1=await userService.getSpecificJobDetails(objectId1);
+  
+    res.sendJSONResponse({
+  
+      code: httpStatus.OK,
+      status: true,
+      message: utility.getWebAppMessages('jobMessage.specificJobGetSuccess'),
+      data:{result:data1}
+  
+    })
+  
+  
+  })
 
 
 
@@ -118,5 +158,7 @@ module.exports = {
   clientHomePage,
   candidateHomePage,
   matchedCandidatesForClientHomePage,
-  matchedClientsForCandidateHomePage
+  matchedClientsForCandidateHomePage,
+  getSpecificCandidate,
+  getSpecificJob
 }
