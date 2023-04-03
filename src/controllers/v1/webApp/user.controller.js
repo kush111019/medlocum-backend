@@ -3,6 +3,8 @@ const pick = require('../../../utils/pick');
 const ApiError = require('../../../utils/ApiError');
 const catchAsync = require('../../../utils/catchAsync');
 const { userService } = require('../../../services/v1/webApp');
+const utility = require('../../../utils/helpers');
+
 
 const createUser = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -34,10 +36,87 @@ const deleteUser = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const candidateHomePage = catchAsync(async (req, res) => {
+
+  let user = req.user;
+  let data1 = await userService.candidateHomePage(user);
+
+  res.sendJSONResponse({
+    code: httpStatus.OK,
+    status: true,
+    message: utility.getWebAppMessages('homePage.CandidateRecommendedJobSuccess'),
+    data: {results:data1}
+  })
+
+})
+
+
+const clientHomePage = catchAsync(async (req, res) => {
+
+  let user = req.user;
+
+  let data1 = await userService.clientHomePage(user);
+
+
+  res.sendJSONResponse({
+
+    code: httpStatus.OK,
+    status: true,
+    message: utility.getWebAppMessages('homePage.ClientRecommendedCandidateSuccess'),
+    data:{results:data1}
+
+  })
+
+
+})
+
+const matchedCandidatesForClientHomePage=catchAsync(async(req,res)=>{
+
+  
+ let user=req.user;
+
+ let data1=await userService.matchedCandidatesForClientHomePage(user);
+  res.status(200).send({status:true,message:data1})
+//  res.sendJSONResponse({
+  
+//   code:httpStatus.OK,
+//   status: true,
+//   message: utility.getWebAppMessages('jobMessage.ClientRecommendedCandidateSuccess'),
+//   data: {result:data1}
+
+// })
+
+})
+
+const matchedClientsForCandidateHomePage=catchAsync(async(req,res)=>{
+
+  let user=req.user;
+ 
+  let data1=await userService.matchedClientsForCandidateHomePage(user);
+  res.status(200).send({status:true,message:data1})
+  res.sendJSONResponse({
+   
+   code:httpStatus.OK,
+   status: true,
+   message: utility.getWebAppMessages('jobMessage.ClientRecommendedCandidateSuccess'),
+   data: {results:data1}
+ 
+ })
+
+  
+ 
+ })
+
+
+
 module.exports = {
   createUser,
   getUsers,
   getUser,
   updateUser,
   deleteUser,
-};
+  clientHomePage,
+  candidateHomePage,
+  matchedCandidatesForClientHomePage,
+  matchedClientsForCandidateHomePage
+}

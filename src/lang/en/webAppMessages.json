@@ -38,5 +38,11 @@
     "userEmailVerifySuccess": "Your account email has been verified successfully.",
     "changePasswordSuccess": "Your password has been changed",
     "accountDeactivated": "Your account has been deactivated by the admin. Please contact support for assistance."
+  },
+  "homePage":{
+    "CandidateRecommendedJobSuccess": "recommended jobs send successfully",
+    "CandidateRecommendedJobFailure": "recommended jobs send failed",
+    "ClientRecommendedCandidateSuccess": "recommended candidates send successfully",
+    "ClientRecommendedCandidateFailure": "recommended candidates send failed"
   }
 }

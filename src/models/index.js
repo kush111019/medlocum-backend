@@ -5,3 +5,6 @@ module.exports.JobCategory = require('./jobCategory.model');
 module.exports.JobDetail = require('./jobDetail.model');
 module.exports.JobRequest = require('./jobRequest.model');
 module.exports.Log = require('./logs.model');
+module.exports.preference=require('./prefrence.model');
+module.exports.favouriteCandidates=require('./favouriteCandidate.model');
+module.exports.favouriteJobs=require('./favouriteJob.model');

@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const { toJSON } = require('./plugins');
 const { schemaNames } = require('../config/schemaNames');
+//type: mongoose.SchemaTypes.ObjectId,
+//ref: schemaNames.JOB_CATEGORIES,
 
 const prefrencesSchema = mongoose.Schema(
   {
@@ -11,13 +13,12 @@ const prefrencesSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
-    jobCategoriesId: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: schemaNames.JOB_CATEGORIES,
+    jobCategory: {
+      type: String,
       required: true,
       trim: true,
     },
-    jobtype: {
+    jobType: {
       type: String,
       required: true,
       trim: true,
