@@ -6,9 +6,9 @@ const favouriteCandidateController = require('../../../controllers/v1/webApp/fav
 const favouriteCandidateValidation = require('../../../validations/v1/webApp/favouriteCandidate.validation');
 
 
-router.post('/:clientId',auth(),validate(favouriteCandidateValidation.createFavouriteCandidate),favouriteCandidateController.createFavouriteCandidate);
+router.post('/',auth(),validate(favouriteCandidateValidation.createFavouriteCandidate),favouriteCandidateController.createFavouriteCandidate);
 
-router.delete('/:clientId',auth(),validate(favouriteCandidateValidation.deleteFavouriteCandidate),favouriteCandidateController.deleteFavouriteCandidate);
+router.delete('/',auth(),validate(favouriteCandidateValidation.deleteFavouriteCandidate),favouriteCandidateController.deleteFavouriteCandidate);
 
 
 

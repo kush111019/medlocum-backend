@@ -8,14 +8,14 @@ const utility = require('../../../utils/helpers');
 const createJobDetails = catchAsync(async (req, res) => {
      
 
-    const {clientId,status,title,subject,description,category,type,cmUsed,location,startDate,endDate,startTime,endTime,salaryType,salaryRange,eirCode,createdAt,updatedAt,paymentMethod,nursingHome,bilisterPacks,methadone,itemsPerDay}=req.body;
+    const {status,title,subject,description,category,type,cmUsed,location,startDate,endDate,startTime,endTime,salaryType,salaryRange,eirCode,createdAt,updatedAt,paymentMethod,nursingHome,bilisterPacks,methadone,itemsPerDay}=req.body;
 
 
     const body=req.body;
-    userId=req.user._id;
+    let user=req.user;
 
 
-    const jobDetailsSaved=await jobService.saveJobDetails(body,userId,req.user);
+    const jobDetailsSaved=await jobService.saveJobDetails(user,body);
     console.log(jobDetailsSaved);
     
     res.sendJSONResponse({
@@ -38,11 +38,13 @@ const updateJobDetails= catchAsync(async(req,res) => {
     
     let user=req.user;
 
-    const objectIdOfJobDetails=req.params.jobDetailsObjectId;
+    const jobId=req.params.jobId;
+  
 
 
 
-    const updatedJobDetails=await jobService.updateJobDetails(objectIdOfJobDetails,body,user);
+
+    const updatedJobDetails=await jobService.updateJobDetails(user,body,jobId);
        
     res.sendJSONResponse({
         code: httpStatus.OK,
@@ -54,14 +56,16 @@ const updateJobDetails= catchAsync(async(req,res) => {
 
     //res.status(httpStatus.CREATED).send({ updatedJobDetails });
 
-
 })
 
 
 const deleteJobDetails= catchAsync(async(req,res)=>{
+  
+let user=req.user;
 
+let jobId=req.params.jobId;
 
-const deletedJobDetails=await jobService.deleteJobDetails(req.params.jobDetailsObjectId,req.user);
+const deletedJobDetails=await jobService.deleteJobDetails(user,jobId);
 
 
 res.sendJSONResponse({

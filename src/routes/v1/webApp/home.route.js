@@ -6,6 +6,8 @@ const validate = require('../../../middlewares/validate');
 const auth = require('../../../middlewares/auth');
 const userValidation = require('../../../validations/v1/webApp/jobDetails.validation');
 
+router.get('/candidate',auth(),userController.candidateHomePage);
+router.get('/client',auth(),userController.clientHomePage)
 
 router.get('/client',auth(),userController.clientHomePage);
 router.get('/candidate',auth(),userController.candidateHomePage)

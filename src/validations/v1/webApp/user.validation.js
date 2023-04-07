@@ -63,7 +63,7 @@ const createPrefrences = {
 
 const getSpecificJob={
   query: Joi.object().keys({
-    jobId: Joi.string().custom(objectId),   
+    objectId: Joi.string().custom(objectId),   
 
   })
 
@@ -72,11 +72,13 @@ const getSpecificJob={
 const getSpecificCandidate={
 
   query: Joi.object().keys({
-    candidateId: Joi.string().custom(objectId),   
+    objectId: Joi.string().custom(objectId),   
 
   })
 
 }
+
+
 
 module.exports = {
   createUser,

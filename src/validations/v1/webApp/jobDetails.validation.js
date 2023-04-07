@@ -4,6 +4,7 @@ const { password, objectId } = require('./custom.validation');
 
 const createJobDetails = {
     body: Joi.object().keys({
+      status: Joi.string().required().valid("open","closed","canceled"),
       subject: Joi.string().required(),
       title: Joi.string().required(),
       description: Joi.string().required(),
@@ -23,7 +24,7 @@ const createJobDetails = {
       nursingHome: Joi.string().required().valid("yes","no"),
       bilisterPacks: Joi.string().required().valid("yes","no"),
       methadone: Joi.string().required().valid("yes","no"),
-      itemsPerDay: Joi.string().required().valid("100-300"),
+      itemsPerDay: Joi.string().required().valid("100-300")
 
     })
   };
@@ -31,39 +32,38 @@ const createJobDetails = {
 
 const updateJobDetails = {
     params: Joi.object().keys({
-        jobDetailsObjectId: Joi.required().custom(objectId),
+        jobId: Joi.required().custom(objectId),
     }),
     body: Joi.object()
       .keys({
-        status: Joi.string().valid('open', 'closed','canceled'),
-        subject: Joi.string(),
-        title: Joi.string(),
-        experience: Joi.string(),
-        description: Joi.string(),
-        category: Joi.string(),
-        type: Joi.string().valid("Full-Time","Part-Time","Locum","Out Of Hours","Daytime GP"),
-        crmUsed: Joi.string(),
-        location: Joi.string(),
-        experience: Joi.string(),
-        startDate: Joi.date(),
-        endDate: Joi.date(),
-        startTime: Joi.string(),
-        endTime: Joi.string(),
-        salaryType: Joi.string(),
-        salaryRange: Joi.object().keys({ min: Joi.number(), max: Joi.number() }),
-        eirCode: Joi.string(),
-        paymentMethod: Joi.string(),
-        nursingHome: Joi.string().valid("yes","no"),
-        bilisterPacks: Joi.string().valid("yes","no"),
-        methadone: Joi.string().valid("yes","no"),
-        itemsPerDay: Joi.string().valid("100-300"),
+      status: Joi.string().valid("open","closed","canceled"),
+      subject: Joi.string(),
+      title: Joi.string(),
+      description: Joi.string(),
+      category: Joi.string(),
+      type: Joi.string().valid("Full-Time","Part-Time","Locum","Out Of Hours","Daytime GP"),
+      experience: Joi.string(),
+      crmUsed: Joi.string(),
+      location: Joi.string(),
+      startDate: Joi.date(),
+      endDate: Joi.date(),
+      startTime: Joi.string(),
+      endTime: Joi.string(),
+      salaryRange: Joi.object().keys({ min: Joi.number(), max: Joi.number() }),
+      salaryType: Joi.string(),
+      eirCode: Joi.string(),
+      paymentMethod: Joi.string(),
+      nursingHome: Joi.string().valid("yes","no"),
+      bilisterPacks: Joi.string().valid("yes","no"),
+      methadone: Joi.string().valid("yes","no"),
+      itemsPerDay: Joi.string().valid("100-300"),
 
       }),
   };
   
   const deleteJobDetails = {
     params: Joi.object().keys({
-        jobDetailsObjectId: Joi.string().custom(objectId).required(),
+        jobId: Joi.string().custom(objectId).required(),
     }),
   };
   

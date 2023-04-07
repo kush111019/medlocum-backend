@@ -5,6 +5,7 @@ const schemaNames = {
   TOKENS: 'tokens',
   PREFRENCES: 'prefrences',
   JOB_DETAILS: 'jobDetails',
+  JOBS: 'jobs',
   JOB_CATEGORIES: 'jobCategories',
   JOB_REQUESTS: 'jobRequests',
   HIRED_CANDIDATE: 'hiredCandidates',

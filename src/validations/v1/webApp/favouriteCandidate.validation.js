@@ -3,9 +3,6 @@ const { password, objectId } = require('./custom.validation');
 
 
 const createFavouriteCandidate = {
-    params: Joi.object().keys({
-      clientId: Joi.custom(objectId).required(),
-    }),
     body: Joi.object()
     .keys({
       candidateId: Joi.custom(objectId).required(),
@@ -17,9 +14,6 @@ const createFavouriteCandidate = {
 };
 
 const deleteFavouriteCandidate={
-  params: Joi.object().keys({
-    clientId: Joi.required().custom(objectId),
-  }),
   body: Joi.object()
   .keys({
     candidateId: Joi.required().custom(objectId),

@@ -4,40 +4,21 @@ const jobService = require('../../../services/v1/webApp/job.service');
 const userService=require('../../../services/v1/webApp/user.service');
 const utility = require('../../../utils/helpers');
 const User=require('../../../models/user.model');
+const ApiError = require('../../../utils/ApiError');
 
 const createJobRequest = catchAsync(async (req, res) => {
 
-
-const {clientId,candidateId,jobDetailId,requestStatus}=req.body;
-
-
 let body=req.body;
+let user=req.user;
+const createdJobRequest=await jobService.createJobRequest(body,user);
 
-const jobDetails=await jobService.getJobDetailsById(jobDetailId);
-
-
-if(!jobDetails) return res.status(httpStatus.NO_CONTENT).send();
-
-
-const client=await User.findById({_id:clientId});
-
-
-if(!client) return res.status(httpStatus.NO_CONTENT).send();
-
-
-const candidate=await User.findById({_id:clientId});
-
-
-if(!candidate) return res.status(httpStatus.NO_CONTENT).send();
-
-
-const createdJobRequest=await jobService.createJobRequest(body);
+//res.status(201).send({status:true,message:createdJobRequest});
 
 res.sendJSONResponse({
     code: httpStatus.OK,
     status: true,
     message: utility.getWebAppMessages('jobMessage.jobRequestCreatedSuccess'),
-    data:createdJobRequest
+    data:{result:createdJobRequest}
   });
 
 //res.status(httpStatus.CREATED).send({ createdJobRequest});
@@ -46,16 +27,15 @@ res.sendJSONResponse({
 
 const updateJobRequest=catchAsync(async (req,res)=>{
 
+let user=req.user;
 
-const jobRequestId=req.params.jobRequestId;
+if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND,'user is not a client');
 
-
-const {clientId,candidateId,jobDetailId,requestStatus}=req.body;
 
 const body=req.body;
 
 
-const jobRequest=await jobService.updateJobRequest(jobRequestId,body);
+const jobRequest=await jobService.updateJobRequest(user,body);
 
 res.sendJSONResponse({
     code: httpStatus.OK,
@@ -72,19 +52,20 @@ res.sendJSONResponse({
 
 const deleteJobRequest=catchAsync(async(req,res)=>{
     
+let user=req.user;
 
-const jobRequestId1=req.params.jobRequestId1;
+if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND, 'User is not a candidate');
 
-const clientId=req.body.clientId;
+let body=req.body;
 
-const jobRequest=await jobService.deleteJobRequest(jobRequestId1,clientId);
+const jobRequest=await jobService.deleteJobRequest(user,body);
 
 
 res.sendJSONResponse({
     code: httpStatus.OK,
     status: true,
     message: utility.getWebAppMessages('jobMessage.jobRequestDeletedSuccess'),
-    data:jobRequest
+    data:{result:jobRequest}
   });
 
 //res.send({jobRequest});

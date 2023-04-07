@@ -16,7 +16,7 @@ const jobRequestSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
-    jobDetailId: {
+    jobId: {
       type: mongoose.SchemaTypes.ObjectId,
       ref: schemaNames.JOB_DETAILS,
       required: true,

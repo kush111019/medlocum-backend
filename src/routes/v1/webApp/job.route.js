@@ -5,7 +5,7 @@ const validate = require('../../../middlewares/validate');
 const auth = require('../../../middlewares/auth');
 const jobDetailsValidation = require('../../../validations/v1/webApp/jobDetails.validation');
 
-router.post('/create',auth(),validate(jobDetailsValidation.createJobDetails), jobDetailsController.createJobDetails);
+router.post('/',auth(),validate(jobDetailsValidation.createJobDetails), jobDetailsController.createJobDetails);
 
 router.patch('/:jobId',auth(),validate(jobDetailsValidation.updateJobDetails),jobDetailsController.updateJobDetails);
 

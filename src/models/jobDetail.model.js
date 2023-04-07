@@ -12,9 +12,9 @@ const jobDetailsSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      required: true,
       enum: ['open', 'closed', 'canceled'],
       trim: true,
+      default:"open",
     },
     subject: {
       type: String,
@@ -26,14 +26,17 @@ const jobDetailsSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    experience:{
+      type:String,
+      required:true,
+    },
     description: {
       type: String,
       required: true,
       trim: true,
     },
-    categoryId: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: schemaNames.JOB_CATEGORIES,
+    category: {
+      type: String,
       required: true,
       trim: true,
     },
@@ -72,13 +75,11 @@ const jobDetailsSchema = mongoose.Schema(
     },
     salaryType: {
       type: String,
-      required: true,
       trim: true,
     },
     salaryRange: {
-      type: String,
-      required: true,
-      trim: true,
+      min: { type: Number },
+      max: { type: Number },
     },
     eirCode: {
       type: String,
@@ -86,11 +87,34 @@ const jobDetailsSchema = mongoose.Schema(
       trim: true,
     },
 
-    travelDistance: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+  paymentMethod:{
+    type: String,
+    required: true,
+    trim: true
+  },
+  nursingHome:{
+    type:String,
+    required: true,
+    trim: true,
+    enum:["yes","no"]
+  },
+  bilisterPacks:{
+    type: String,
+    required: true,
+    trim:true,
+    enum:["yes","no"]
+  },
+  methadone:{
+    type: String,
+    required: true,
+    trim:true,
+    enum:["yes","no"]
+  },
+  itemsPerDay:{
+    type:String,
+    required: true,
+    enum:["100-300"],
+  },
   },
   {
     timestamps: true,
@@ -104,6 +128,7 @@ jobDetailsSchema.plugin(toJSON);
 /**
  * @typedef JobDetail
  */
-const JobDetail = mongoose.model(schemaNames.JOB_DETAILS, jobDetailsSchema);
+//const JobDetail=mongoose.model(schemaNames.JOB_DETAILS,jobDetailsSchema);
+const JobDetail = mongoose.model(schemaNames.JOBS, jobDetailsSchema);
 
 module.exports = JobDetail;

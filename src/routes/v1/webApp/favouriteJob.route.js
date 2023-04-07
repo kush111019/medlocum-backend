@@ -7,10 +7,10 @@ const favouriteJobValidation = require('../../../validations/v1/webApp/favourite
 const auth = require('../../../middlewares/auth');
 
 
-router.post('/:candidateId',auth(),validate(favouriteJobValidation.createFavouriteJob),favouriteJobController.createFavouriteJob);
+router.post('/',auth(),validate(favouriteJobValidation.createFavouriteJob),favouriteJobController.createFavouriteJob);
 
 
-router.delete('/:candidateId',auth(),validate(favouriteJobValidation.deleteFavouriteJob),favouriteJobController.deleteFavouriteJob);
+router.delete('/',auth(),validate(favouriteJobValidation.deleteFavouriteJob),favouriteJobController.deleteFavouriteJob);
 
 
 

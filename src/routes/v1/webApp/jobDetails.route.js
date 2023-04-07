@@ -5,11 +5,11 @@ const validate = require('../../../middlewares/validate');
 const auth = require('../../../middlewares/auth');
 const jobDetailsValidation = require('../../../validations/v1/webApp/jobDetails.validation');
 
-router.post('/create',auth(),validate(jobDetailsValidation.createJobDetails), jobDetailsController.createJobDetails);
+router.post('/',auth(),validate(jobDetailsValidation.createJobDetails), jobDetailsController.createJobDetails);
 
-router.patch('/:jobDetailsObjectId',auth(),validate(jobDetailsValidation.updateJobDetails),jobDetailsController.updateJobDetails);
+router.patch('/:jobId',auth(),validate(jobDetailsValidation.updateJobDetails),jobDetailsController.updateJobDetails);
 
-router.delete('/:jobDetailsObjectId',auth(),validate(jobDetailsValidation.deleteJobDetails),jobDetailsController.deleteJobDetails);
+router.delete('/:jobId',auth(),validate(jobDetailsValidation.deleteJobDetails),jobDetailsController.deleteJobDetails);
 
 router.get('/filterJobDetails',auth(),validate(jobDetailsValidation.filterJobDetails),jobDetailsController.filterJobDetails);
 

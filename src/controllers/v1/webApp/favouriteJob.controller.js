@@ -5,13 +5,15 @@ const utility = require('../../../utils/helpers');
 
 const createFavouriteJob = catchAsync(async (req, res) => {
 
-let candidateId=req.params.candidateId;
+let user=req.user;
 let jobId=req.body.jobId;
+let clientId=req.body.clientId;
 let createdAt=req.body.createdAt;
 let updatedAt=req.body.updatedAt;
 
 let arr=[];
-arr.push(candidateId);
+arr.push(clientId);
+arr.push(user);
 arr.push(jobId);
 arr.push(createdAt);
 arr.push(updatedAt);
@@ -31,13 +33,15 @@ res.sendJSONResponse({
 
 const deleteFavouriteJob=catchAsync(async(req,res)=>{
 
-let candidateId=req.params.candidateId;
+let user=req.user;
 let jobId=req.body.jobId;
 let favouriteJobId=req.body.favouriteJobId;
+let clientId=req.body.clientId;
 let arr=[];
-arr.push(candidateId);
+arr.push(user);
 arr.push(jobId);
 arr.push(favouriteJobId);
+arr.push(clientId);
 let data1=await jobService.deleteFavouriteJob(...arr);
 
 

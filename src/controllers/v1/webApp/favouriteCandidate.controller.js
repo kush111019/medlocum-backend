@@ -4,14 +4,14 @@ const jobService = require('../../../services/v1/webApp/job.service');
 const utility = require('../../../utils/helpers');
 
 const createFavouriteCandidate=catchAsync(async(req,res)=>{
-
-    let clientId=req.params.clientId;
+    
+    let user=req.user;
     let candidateId=req.body.candidateId;
     let createdAt=req.body.createdAt;
     let updatedAt=req.body.updatedAt;
 
     let arr=[];
-    arr.push(clientId);
+    arr.push(user);
     arr.push(candidateId);
     arr.push(createdAt);
     arr.push(updatedAt);
@@ -22,7 +22,7 @@ const createFavouriteCandidate=catchAsync(async(req,res)=>{
         code: httpStatus.OK,
         status: true,
         message: utility.getWebAppMessages('jobMessage.favouriteCandidateAddedSuccess'),
-        data:data1
+        data:{result:data1}
       });
   
   
@@ -31,12 +31,12 @@ const createFavouriteCandidate=catchAsync(async(req,res)=>{
 
   const deleteFavouriteCandidate=catchAsync(async(req,res)=>{
    
-    let clientId=req.params.clientId;
+    let user=req.user;
     let candidateId=req.body.candidateId;
     let favouriteCandidateId=req.body.favouriteCandidateId;
 
     let arr=[];
-    arr.push(clientId);
+    arr.push(user);
     arr.push(candidateId);
     arr.push(favouriteCandidateId);
 
@@ -47,7 +47,7 @@ const createFavouriteCandidate=catchAsync(async(req,res)=>{
         code: httpStatus.OK,
         status: true,
         message: utility.getWebAppMessages('jobMessage.favouriteCandidateDeletedSuccess'),
-        data:data1
+        data:{result:data1}
       });
 
  })

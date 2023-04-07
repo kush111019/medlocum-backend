@@ -7,6 +7,7 @@ const favouriteCandidate=require('../../../models/favouriteCandidate.model');
 const favouriteJob=require('../../../models/favouriteJob.model');
 const ApiError = require('../../../utils/ApiError');
 const userService = require('./user.service');
+const tokenService = require('./token.service');
 /**
  * jobCategoryExists
  * @param {ObjectId} categoryId
@@ -25,27 +26,32 @@ const userService = require('./user.service');
 
 
 
-const saveJobDetails= async(jobObject,userId,user)=>{
- 
-const user1=await User.findById({_id:userId})
+const saveJobDetails= async(user,body)=>{
 
-if(!user1) throw new ApiError(httpStatus.NOT_FOUND, 'user not found');
 
 if(user.role!="client")  throw new ApiError(httpStatus.UNAUTHORIZED, 'Not a client')
-
-let startDate1=new Date(jobObject.startDate);
-
-let endDate1=new Date(jobObject.endDate);
  
-let itemsPerDay=jobObject.itemsPerDay;
+const clientId=user._id;
+
+const clientIsRegistered=await User.findById({_id:clientId})
+
+if(!clientIsRegistered) throw new ApiError(httpStatus.NOT_FOUND, 'client is not registered');
+
+
+
+let startDate1=new Date(body.startDate);
+
+let endDate1=new Date(body.endDate);
+ 
+let itemsPerDay=body.itemsPerDay;
 
  if(["100-300"].indexOf(itemsPerDay)==-1) throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect itemsPerDay'); 
 
- jobObject.startDate=startDate1;
- jobObject.endDate=endDate1;
- jobObject.clientId=userId;
+ body.startDate=startDate1;
+ body.endDate=endDate1;
+ body.clientId=clientId;
 
- const jobDetailsSaved=await jobDetails.create(jobObject);
+ const jobDetailsSaved=await jobDetails.create(body);
 
  if(!jobDetailsSaved) throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect objectId');
 
@@ -93,102 +99,182 @@ const getJobDetailsForBoth=async(user)=>{
 }
 
 
-const updateJobDetails=async(objectId,jobObject,user) => {
+const updateJobDetails=async(user,body,jobId) => {
 
-const jobDetails1=await getJobDetailsById(objectId);
-if (!jobDetails1) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'jobDetails not found');
+if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND, 'user is not a client');
+
+let clientId=user._id;
+
+let clientIsRegistered=await User.findById({_id:clientId});
+
+if(!clientIsRegistered) throw new ApiError(httpStatus.NOT_FOUND, 'client is not registered');
+
+const jobDetailExits=await getJobDetailsById(jobId);
+if (!jobDetailExits) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'jobDetails not found with this jobDetailId');
   } 
 
-let userId=user._id;
+let clientIdFromJobDetail=jobDetailExits.clientId.toString();
 
-const userExists=await jobDetails.findOne({clientId:userId});
-if(!userExists){
-  throw new ApiError(httpStatus.NOT_FOUND, 'user not found');
-}
+clientId=clientId.toString();
 
-if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND, 'user is not a client found');
-  Object.assign(jobDetails1, jobObject);
-  await jobDetails1.save();
-  return jobDetails1;
+if(clientIdFromJobDetail!==clientId) throw new ApiError(httpStatus.NOT_FOUND, 'clientId does not match');
+ 
+  Object.assign(jobDetailExits,body);
+  await jobDetailExits.save();
+  return jobDetailExits;
 
 }
 
 
-const deleteJobDetails=async(objectId,user)=>{
+const deleteJobDetails=async(user,jobId)=>{
   
 if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND, 'user is not a client');
 
-let userId=user._id;
+let clientId=user._id;
 
-const clientExists=await jobDetails.findOne({clientId:userId});
+let clientIsRegistered=await User.findById({_id:clientId});
 
-if(!clientExists){
-  throw new ApiError(httpStatus.NOT_FOUND, 'client not found');
+if(!clientIsRegistered) throw new ApiError(httpStatus.NOT_FOUND, 'user is not a client')
+
+let jobDetailExists=await jobDetails.findById({_id:jobId});
+
+if(!jobDetailExists) throw new ApiError(httpStatus.NOT_FOUND, 'jobDetails not found with this jobDetailId');
+
+
+const clientIdFromJobDetail=jobDetailExists.clientId.toString();
+
+clientId=clientId.toString();
+
+if(clientIdFromJobDetail!=clientId) throw new ApiError(httpStatus.NOT_FOUND, 'clientID does not match');
+
+  await jobDetailExists.remove();
+  return jobDetailExists;
+
 }
 
-const jobDetailsExists = await getJobDetailsById(objectId);
 
-if (!jobDetailsExists) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'jobDetails not found');
-  }
-  await jobDetailsExists.remove();
-  return jobDetailsExists;
+const createJobRequest=async(body,user)=>{
 
-}
+  if(user.role!="candidate") throw new ApiError(httpStatus.NOT_FOUND,'User is not a candidate');
 
+  let candidateId=user._id;
 
-const createJobRequest=async(jobRequestObject)=>{
-  
-  if(['pending', 'approved', 'canceled', 'rejected'].indexOf(jobRequestObject.requestStatus) ==-1)throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect status')
+  let{clientId,jobId}=body;
 
-  const jobRequest1=await jobRequest.create(jobRequestObject);
+  body.candidateId=candidateId;
+
+  let clientIsRegistered=await User.findById({_id:clientId});
+
+  if(!clientIsRegistered) throw new ApiError(httpStatus.NOT_FOUND,'Client is not registered');
+
+  let jobExists=await jobDetails.findById({_id:jobId});
+  console.log(jobExists);
+
+  if(!jobExists) throw new ApiError(httpStatus.NOT_FOUND,'Job does not exist');
+
+  let clientIdFromJobDetails=jobExists.clientId;
+
+  if(clientIdFromJobDetails!=clientId) throw new ApiError(httpStatus.NOT_FOUND,'this job is not registered with this clientId');
+
+  let requestStatus="pending";
+
+  body.requestStatus=requestStatus;
+
+  const jobRequest1=await jobRequest.create(body);
+
 
   return jobRequest1;
 
 }
 
 
-const updateJobRequest=async(objectId,object)=>{
+const updateJobRequest=async(user,body)=>{
    
-    const jobRequest1=await jobRequest.findById({_id:objectId});
-    
-    if(!jobRequest1) throw new ApiError(httpStatus.NOT_FOUND, 'Job Request not found');
+  if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND, 'User is not a client');
 
-    const clientExists=await jobRequest.findOne({_id:objectId,clientId:object.clientId});
+  let clientId=user._id;
 
-    if(!clientExists) throw new ApiError(httpStatus.NOT_FOUND, 'Client not found');
+  let{candidateId,requestStatus,jobId,jobRequestId}=body;
 
-    const candidateExists=await jobRequest.findOne({_id:objectId,candidateId:object.candidateId});
+  let clientExistsInRecords=await User.findById({_id:clientId});
 
-    if(!candidateExists) throw new ApiError(httpStatus.NOT_FOUND, 'Candidate not found');
+  if(!clientExistsInRecords) throw new ApiError(httpStatus.NOT_FOUND,'client is not registered');
 
+  let candidateExistsInRecords=await User.findById({_id:candidateId});
 
+  if(!candidateExistsInRecords) throw new ApiError(httpStatus.NOT_FOUND,'candidate is not registered');
 
-    Object.assign(jobRequest1,object);
-    await jobRequest1.save();
-    return jobRequest1;
+  let jobIdExistsInRecords=await jobDetails.findById({_id:jobId});
+
+  if(!jobIdExistsInRecords) throw new ApiError(httpStatus.NOT_FOUND,'cannot update with this jobId');
+
+  let clientIdFromJobDetails=jobIdExistsInRecords.clientId;
+
+  if(clientIdFromJobDetails!=clientId) throw new ApiError(httpStatus.NOT_FOUND,'no job details are found with this clientId');
+
+  
+  let jobRequestIdExists=await jobRequest.findById({_id:jobRequestId});
+
+  if(!jobRequestIdExists) throw new ApiError(httpStatus.NOT,'no record is found with this jobRequestId');
+
+  let clientIdFromJobRequest=jobRequestIdExists.clientId;
+  let candidateIdFromJobRequest=jobRequestIdExists.candidateId;
+
+  if(clientIdFromJobRequest!=clientId) throw new ApiError(httpStatus.NOT_FOUND,'record cannot be updated with this clientId');
+
+  if(candidateIdFromJobRequest!=candidateId) throw new ApiError(httpStatus.NOT_FOUND,'record cannot be updated with this candidateId');
+
+  Object.assign(jobRequestIdExists,body);
+  await jobRequestIdExists.save();
+  return jobRequestIdExists;
 
 }
 
-const deleteJobRequest=async(objectId1,objectId2)=>{
+const deleteJobRequest=async(user,body)=>{
 
-const jobRequest1=await jobRequest.findById({_id:objectId1});
+if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND,'user is not a client');
 
-if(!jobRequest1) throw new ApiError(httpStatus.NOT_FOUND, 'job request not found');
+let clientId=user._id;
 
-const clientIdExists=await jobRequest.findOne({clientId:objectId2});
+let{jobRequestId,candidateId,jobId}=body;
 
-if(!clientIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'client not found');
+let clientExists=await User.findById({_id:clientId});
 
-await jobRequest1.remove();
-return jobRequest1;
+if(!clientExists) throw new ApiError(httpStatus.NOT,'Client is not registered');
+
+let candidateExistsInRecords=await User.findById({_id:candidateId});
+
+if(!candidateExistsInRecords) throw new ApiError(httpStatus.NOT_FOUND,'candidate is not registered');
+
+let jobDetailsExists=await jobDetails.findById({_id:jobId});
+
+if(!jobDetailsExists) throw new ApiError(httpStatus.NOT_FOUND,'job details does not exists with this jobRequestId');
+
+let clientIdExistsInJobDetails=jobDetailsExists.clientId;
+
+if(clientIdExistsInJobDetails!=clientId) throw new ApiError(httpStatus.NOT_FOUND, 'no job details exists with this jobRequestId');
+
+const jobRequestRecordExists=await jobRequest.findById({_id:jobRequestId});
+
+if(!jobRequestRecordExists) throw new ApiError(httpStatus.NOT_FOUND, 'job request not found');
+
+let clientIdInRecord=jobRequestRecordExists.clientId;
+let jobDetailIdInRecord=jobRequestRecordExists.jobId;
+
+if(clientIdInRecord!=clientId) throw new ApiError(httpStatus.NOT_FOUND,'no record exists with this clientId');
+
+if(jobDetailIdInRecord!=jobId) throw new ApiError(httpStatus.NOT_FOUND,'no record exists with this jobDetailId');
+
+
+await jobRequestRecordExists.remove();
+return jobRequestRecordExists;
 
 }
 
 
 const filteredJobDetails=async(experience1,jobType1,user)=>{
- 
+
 
  let jobTypeInDb=["Full-Time","Part-Time","Locum","Out Of Hours,","Daytime GP"];
 
@@ -202,20 +288,6 @@ const filteredJobDetails=async(experience1,jobType1,user)=>{
 if(jobType1!==null){
   jobType=jobType1;
 }
-
-//  if(experience!==null){
-//   if(experience!==undefined && experience!==null){
-//  if(!Array.isArray(experience)) throw new ApiError(httpStatus.UNAUTHORIZED, 'experience is not an Array');
-//   }
-//  }
-//  if(jobType!==null){
-//   if(jobType!==undefined && jobType!==null){
-//  if(!Array.isArray(jobType)) throw new ApiError(httpStatus.UNAUTHORIZED, 'jobType is not an Array')
-//  }
-// }
-
-
-
  
 if(experience!==null && jobType!==null){
   let jobArr=[];
@@ -348,22 +420,37 @@ let favouriteCandidateById=await favouriteCandidate.findById({_id:objectId})
 
 if(!favouriteCandidateById) throw new ApiError(httpStatus.NOT_FOUND, 'Not found');
 
-  return favouriteCandidateById;
+return favouriteCandidateById;
 }
 
 
 
 
-const createFavouriteJob=async(candidateId,jobId,createdAt,updatedAt)=>{
+const createFavouriteJob=async(clientId,user,jobId,createdAt,updatedAt)=>{
  
+if(user.role!="candidate") throw new ApiError(httpStatus.NOT_FOUND, 'user is not candidate');
+
+let candidateId=user._id;
+
+
+let candidateIdExists=await User.findById({_id:candidateId});
+
+if(!candidateIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'candidate not found with this candidateId');
+
+let clientExists=await User.findById({_id:clientId});
+
+if(!clientExists) throw new ApiError(httpStatus.NOT_FOUND, 'client is not registered')
 
 let jobIdExists=await getJobDetailsById(jobId);
 
 if(!jobIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'job details not found');
 
-let candidateIdExists=await User.findById({_id:candidateId});
+let clientIdFromJobDetails=jobIdExists.clientId;
 
-if(!candidateIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'candidate not found');
+if(clientIdFromJobDetails!=clientId) throw new ApiError(httpStatus.NOT_FOUND, 'clientId is not matching');
+
+
+
 let date1=new Date(createdAt);
 let date2=new Date(updatedAt);
 let obj=new Object();
@@ -379,38 +466,69 @@ return data;
 }
 
 
-const deleteFavouriteJob=async(candidateId,jobId,favouriteJobId)=>{
 
- 
- let jobIdExists=await getJobDetailsById(jobId);
+const deleteFavouriteJob=async(user,jobId,favouriteJobId,clientId)=>{
 
- if(!jobIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'job details not found');
- 
+ if(user.role!="candidate") throw new ApiError(httpStatus.NOT_FOUND, 'user is not a candidate');
+
+ let candidateId=user._id;
+
+
  let candidateIdExists=await User.findById({_id:candidateId});
  
- if(!candidateIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'candidate not found');
+ if(!candidateIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'candidate is not registered');
 
-let favouriteJobById1=await favouriteJobById(favouriteJobId);
+ let clientExists=await User.findById({_id:clientId});
 
-if(!favouriteJobById1) throw new ApiError(httpStatus.NOT_FOUND, 'candidate not found');
+ if(!clientExists) throw new ApiError(httpStatus.NOT_FOUND, 'client not is registered');
 
-await favouriteJobById1.remove();
-return favouriteJobById1;
+ let jobIdExistsInJobDetails=await getJobDetailsById(jobId);
+
+ if(!jobIdExistsInJobDetails) throw new ApiError(httpStatus.NOT_FOUND, 'job details not found');
+ 
+ let clientIdFromJobDetails=jobIdExistsInJobDetails.clientId;
+
+ if(clientIdFromJobDetails!=clientId) throw new ApiError(httpStatus.NOT_FOUND, 'client Id is not matching');
+
+ let favouriteJobExists=await favouriteJob.findById({_id:favouriteJobId});
+
+ if(!favouriteJobExists) throw new ApiError(httpStatus.NOT_FOUND, 'favouriteJob not exist');
+
+let jobIdFromJobExists=favouriteJobExists.jobId;
+
+jobIdFromJobExists=jobIdFromJobExists.toString();
+
+
+if(jobIdFromJobExists!==jobId) throw new ApiError(httpStatus.NOT_FOUND, 'record cannot be deleted with this jobId');
+
+console.log(favouriteJobExists);
+let candidateIdFromJobExists=favouriteJobExists.candidateId;
+
+candidateIdFromJobExists = candidateIdFromJobExists.toString();
+
+if(candidateIdFromJobExists!=candidateId) throw new ApiError(httpStatus.NOT_FOUND,'Record cannot be deleted with this candidateId');
+
+await favouriteJobExists.remove();
+return favouriteJobExists;
 
 }
 
 
-const createFavouriteCandidate=async(clientId,candidateId,createdAt,updatedAt)=>
+const createFavouriteCandidate=async(user,candidateId,createdAt,updatedAt)=>
 
 {
- 
+if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND, 'user is not a client');
+
+let clientId=user._id;
+
 let clientIdExists=await User.findOne({_id:clientId});
 
-if(!clientIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'client not found');
+if(!clientIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'client is not registered');
 
-let candidateIdExists=await User.findOne({_id:candidateId});
+let candidateIdExists=await User.findById({_id:candidateId});
 
-if(!candidateIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'candidate not found');
+
+if(!candidateIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'candidate is not registered');
 
 let date1=new Date(createdAt);
 let date2=new Date(updatedAt);
@@ -427,21 +545,32 @@ return data;
 
 }
 
-const deleteFavouriteCandidate=async(clientId,candidateId,favouriteCandidateId)=>{
+const deleteFavouriteCandidate=async(user,candidateId,favouriteCandidateId)=>{
 
-  let clientIdExists=await User.findById({_id:clientId})
-  //let clientIdExists=await userService.getUserById(clientId);
+  if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND, 'user is not a client');
 
-  if(!clientIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'client not found');
+  let clientId=user._id;
+
+  let clientIsRegistered=await User.findById({_id:clientId});
   
-  let candidateIdExists=await User.findById({_id:candidateId});
-  //let candidateIdExists=await userService.getUserById(candidateId);
+  if(!clientIsRegistered) throw new ApiError(httpStatus.NOT_FOUND, 'client is not registered');
 
-  if(!candidateIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'candidate not found');
- 
+  let candidateIsRegistered=await User.findById({_id:candidateId});
+  
+  if(!candidateIsRegistered) throw new ApiError(httpStatus.NOT_FOUND, 'candidate is not registered');
+
   let favouriteCandidateIdExists=await favouriteCandidateById(favouriteCandidateId)
+  
+  if(!favouriteCandidateIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'no favourite candidate record is found with this candidateId')
 
-  if(!favouriteCandidateIdExists) throw new ApiError(httpStatus.NOT_FOUND, 'favourite candidate not found');
+  let favouriteCandidateIdInRecord=favouriteCandidateIdExists.candidateId.toString();
+  let favouriteClientIdInRecord=favouriteCandidateIdExists.clientId.toString();
+  
+
+  if(favouriteCandidateIdInRecord!=candidateId) throw new ApiError(httpStatus.NOT_FOUND,'candidate Id is not matching');
+  
+  if(favouriteClientIdInRecord!=clientId) throw new ApiError(httpStatus.NOT_FOUND,'client Id is not matching');
+
 
   await favouriteCandidateIdExists.remove();
   return favouriteCandidateIdExists;

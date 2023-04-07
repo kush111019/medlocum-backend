@@ -20,10 +20,10 @@ const LogSchema = new Schema(
     collection: schemaNames.LOGS,
     versionKey: false,
     timestamps: true,
-    capped: {
-      size: 10000000,
-      // autoIndexId: true,
-    },
+    // capped: {
+    //   size: 10000000,
+    //   // autoIndexId: true,
+    // },
   }
 );
 
