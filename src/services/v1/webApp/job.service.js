@@ -206,24 +206,24 @@ const updateJobRequest=async(user,body)=>{
   if(!candidateExistsInRecords) throw new ApiError(httpStatus.NOT_FOUND,'candidate is not registered');
 
   let jobIdExistsInRecords=await jobDetails.findById({_id:jobId});
-
   if(!jobIdExistsInRecords) throw new ApiError(httpStatus.NOT_FOUND,'cannot update with this jobId');
 
-  let clientIdFromJobDetails=jobIdExistsInRecords.clientId;
-
-  if(clientIdFromJobDetails!=clientId) throw new ApiError(httpStatus.NOT_FOUND,'no job details are found with this clientId');
+  let clientIdFromJobDetails;
+  clientIdFromJobDetails=jobIdExistsInRecords.clientId.toString();
+  clientId=clientId.toString();
+  if(clientIdFromJobDetails!==clientId) throw new ApiError(httpStatus.NOT_FOUND,'no job details are found with this clientId');
 
   
   let jobRequestIdExists=await jobRequest.findById({_id:jobRequestId});
 
   if(!jobRequestIdExists) throw new ApiError(httpStatus.NOT,'no record is found with this jobRequestId');
 
-  let clientIdFromJobRequest=jobRequestIdExists.clientId;
-  let candidateIdFromJobRequest=jobRequestIdExists.candidateId;
+  let clientIdFromJobRequest=jobRequestIdExists.clientId.toString();
+  let candidateIdFromJobRequest=jobRequestIdExists.candidateId.toString();
+  candidateId=candidateId.toString();
+  if(clientIdFromJobRequest!==clientId) throw new ApiError(httpStatus.NOT_FOUND,'record cannot be updated with this clientId');
 
-  if(clientIdFromJobRequest!=clientId) throw new ApiError(httpStatus.NOT_FOUND,'record cannot be updated with this clientId');
-
-  if(candidateIdFromJobRequest!=candidateId) throw new ApiError(httpStatus.NOT_FOUND,'record cannot be updated with this candidateId');
+  if(candidateIdFromJobRequest!==candidateId) throw new ApiError(httpStatus.NOT_FOUND,'record cannot be updated with this candidateId');
 
   Object.assign(jobRequestIdExists,body);
   await jobRequestIdExists.save();
@@ -251,7 +251,8 @@ let jobDetailsExists=await jobDetails.findById({_id:jobId});
 
 if(!jobDetailsExists) throw new ApiError(httpStatus.NOT_FOUND,'job details does not exists with this jobRequestId');
 
-let clientIdExistsInJobDetails=jobDetailsExists.clientId;
+let clientIdExistsInJobDetails=jobDetailsExists.clientId.toString();
+clientId=clientId.toString();
 
 if(clientIdExistsInJobDetails!=clientId) throw new ApiError(httpStatus.NOT_FOUND, 'no job details exists with this jobRequestId');
 
@@ -259,8 +260,8 @@ const jobRequestRecordExists=await jobRequest.findById({_id:jobRequestId});
 
 if(!jobRequestRecordExists) throw new ApiError(httpStatus.NOT_FOUND, 'job request not found');
 
-let clientIdInRecord=jobRequestRecordExists.clientId;
-let jobDetailIdInRecord=jobRequestRecordExists.jobId;
+let clientIdInRecord=jobRequestRecordExists.clientId.toString();
+let jobDetailIdInRecord=jobRequestRecordExists.jobId.toString();
 
 if(clientIdInRecord!=clientId) throw new ApiError(httpStatus.NOT_FOUND,'no record exists with this clientId');
 

@@ -26,8 +26,8 @@ const createJobRequest = {
     body: Joi.object()
     .keys({
       candidateId: Joi.string().custom(objectId).required(),
-      jobId: Joi.string().custom(objectId).required,
-      jobRequestId: Joi.string().custom(objectId).required
+      jobId: Joi.string().custom(objectId).required(),
+      jobRequestId: Joi.string().custom(objectId).required()
     })
   };
 
