@@ -81,5 +81,10 @@
     "jobGetSuccess": "job Details are fetched successfully",
     "specificUserGetSuccess": "specific user details are fetched successfully",
     "specificJobGetSuccess": "specific job details are fetched successfully"
+    },
+
+    "contactUs":{
+      "emailSentSuccess": "email sent successfully",
+      "emailSentFailure": "email sent failed"
     }
 }

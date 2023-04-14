@@ -4,4 +4,6 @@ module.exports.jobDetailsController = require('./jobDetails.controller');
 module.exports.favouriteCandidateController=require('./favouriteCandidate.controller');
 module.exports.favouriteJob=require('./favouriteJob.controller');
 module.exports.jobRequestController=require('./jobRequest.controller');
+module.exports.contactUsController=require('./contactUs.controller');
+
 

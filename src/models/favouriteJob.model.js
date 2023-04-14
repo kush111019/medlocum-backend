@@ -20,6 +20,6 @@ updatedAt:{type:Date,required:true}
 favouriteJobSchema.plugin(toJSON);
 
 
-const favouriteJob=mongoose.model("favouritejobs",favouriteJobSchema);
+const favouriteJob=mongoose.model(schemaNames.FAVOURITE_JOBS,favouriteJobSchema);
 
 module.exports=favouriteJob;

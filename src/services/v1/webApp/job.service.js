@@ -45,7 +45,7 @@ let endDate1=new Date(body.endDate);
  
 let itemsPerDay=body.itemsPerDay;
 
- if(["100-300"].indexOf(itemsPerDay)==-1) throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect itemsPerDay'); 
+ if(["100-300"].indexOf(itemsPerDay)==-1) throw new ApiError(httpStatus.BAD_REQUEST, 'Incorrect itemsPerDay'); 
 
  body.startDate=startDate1;
  body.endDate=endDate1;
@@ -53,7 +53,7 @@ let itemsPerDay=body.itemsPerDay;
 
  const jobDetailsSaved=await jobDetails.create(body);
 
- if(!jobDetailsSaved) throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect objectId');
+ if(!jobDetailsSaved) throw new ApiError(httpStatus.INTERNAL_SERVER, 'Incorrect objectId');
 
  return jobDetailsSaved;
 
@@ -129,7 +129,7 @@ if(clientIdFromJobDetail!==clientId) throw new ApiError(httpStatus.NOT_FOUND, 'c
 
 const deleteJobDetails=async(user,jobId)=>{
   
-if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND, 'user is not a client');
+if(user.role!="client") throw new ApiError(httpStatus.UNAUTHORIZED, 'user is not a client');
 
 let clientId=user._id;
 
@@ -156,7 +156,7 @@ if(clientIdFromJobDetail!=clientId) throw new ApiError(httpStatus.NOT_FOUND, 'cl
 
 const createJobRequest=async(body,user)=>{
 
-  if(user.role!="candidate") throw new ApiError(httpStatus.NOT_FOUND,'User is not a candidate');
+  if(user.role!="candidate") throw new ApiError(httpStatus.UNAUTHORIZED,'User is not a candidate');
 
   let candidateId=user._id;
 
@@ -191,7 +191,7 @@ const createJobRequest=async(body,user)=>{
 
 const updateJobRequest=async(user,body)=>{
    
-  if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND, 'User is not a client');
+  if(user.role!="client") throw new ApiError(httpStatus.UNAUTHORIZED, 'User is not a client');
 
   let clientId=user._id;
 

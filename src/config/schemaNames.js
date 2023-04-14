@@ -12,6 +12,9 @@ const schemaNames = {
   INVOICES: 'invoices',
   TIME_SHEET: 'timeSheets',
   TIME_SHEET_DATA: 'timeSheetDetails',
+  CONTACT_US: "contactUs",
+  FAVOURITE_CANDIDATE: "favouritecandidates",
+  FAVOURITE_JOBS: "favouritejobs"
 };
 
 module.exports = { schemaNames };

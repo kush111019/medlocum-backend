@@ -9,6 +9,7 @@ const jobRequestRoute=require('./jobRequest.route');
 const favouriteJobRoute=require('./favouriteJob.route');
 const favouriteCandidateRoute=require('./favouriteCandidate.route');
 const specificUserRoute=require('./specificUser.route');
+const contactUsRoute=require('./contactUs.route');
 const jobRoute = require('./job.route');
 
 const router = express.Router();
@@ -52,6 +53,10 @@ const defaultRoutes = [
   {
     path:'/specificUser',
     route:specificUserRoute,
+  },
+  {
+    path:'/contactUs',
+    route:contactUsRoute,
   }
 ];
 

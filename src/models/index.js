@@ -8,3 +8,4 @@ module.exports.Log = require('./logs.model');
 module.exports.preference=require('./prefrence.model');
 module.exports.favouriteCandidates=require('./favouriteCandidate.model');
 module.exports.favouriteJobs=require('./favouriteJob.model');
+module.exports.contactUs=require('./contactUs.model');

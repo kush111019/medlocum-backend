@@ -121,7 +121,7 @@ const candidateHomePage = async (user) => {
 
   
  
-  if(user.role!="candidate") throw new ApiError(httpStatus.NOT_FOUND, 'user is not a candidate');
+  if(user.role!="candidate") throw new ApiError(httpStatus.UNAUTHORIZED, 'user is not a candidate');
 
   let userId=user._id;
 
@@ -345,7 +345,7 @@ newObject.recommendedCandidates=recommendedClients;
 
 const clientHomePage = async (user) => {
 
-  if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND, 'user is not a client');
+  if(user.role!="client") throw new ApiError(httpStatus.UNAUTHORIZED, 'user is not a client');
 
   let userId=user._id;
 
@@ -527,7 +527,7 @@ newObject.recommendedCandidates=recommendedCandidates;
 
 const matchedCandidatesForClientHomePage = async function(user,...searchParameters){
 
-  if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND, 'user is not a client');
+  if(user.role!="client") throw new ApiError(httpStatus.UNAUTHORIZED, 'user is not a client');
 
   let userId=user._id;
 
@@ -1394,7 +1394,7 @@ finalMostRecent[i].updatedAt=newMostRecent.updatedAt;
  const matchedClientsForCandidateHomePage=async function(user,...searchParameters){
   
 
-  if(user.role!="candidate") throw new ApiError(httpStatus.NOT_FOUND, 'user is not a candidate');
+  if(user.role!="candidate") throw new ApiError(httpStatus.UNAUTHORIZED, 'user is not a candidate');
 
   let userId=user._id;
 
@@ -1611,8 +1611,7 @@ finalMostRecent[i].updatedAt=newMostRecent.updatedAt;
   
  }
 
-console.log("1614");
-console.log("descriptionRequired");
+
 console.log(typeof descriptionRequired);
  let newBestMatches=[];
 if(descriptionRequired!=undefined){

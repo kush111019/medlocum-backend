@@ -25,6 +25,6 @@ updatedAt:{type:Date,required:true},
 favouriteCandidateSchema.plugin(toJSON);
 
 
-const favouriteCandidate=mongoose.model("favouritecandidates",favouriteCandidateSchema);
+const favouriteCandidate=mongoose.model(schemaNames.FAVOURITE_CANDIDATE,favouriteCandidateSchema);
 
 module.exports=favouriteCandidate;

@@ -1,10 +1,14 @@
 const nodemailer = require('nodemailer');
 const config = require('../../../config/config');
 const logger = require('../../../config/logger');
+const ApiError = require('../../../utils/ApiError');
+const contactUs=require('../../../models/contactUs.model')
+const userDetail = require('../../../models/userDetail.model');
+const user=require('../../../models/user.model');
 
 const transport = nodemailer.createTransport(config.email.smtp);
 /* istanbul ignore next */
-if (config.env !== 'test') {
+if (config.env !== 'test') { 
   transport
     .verify()
     .then(() => logger.info('Connected to email server'))
@@ -55,9 +59,146 @@ If you did not create an account, then ignore this email.`;
   await sendEmail(to, subject, text);
 };
 
+const contactUsForInformation = async(body,user) => {
+
+if(user.role=="candidate")  
+{
+if(user.emailVerified===false) throw new ApiError(httpStatus.UNAUTHORIZED, 'email of the candidate is not verified');
+
+
+let candidateId=user._id;
+let email=user.email;
+
+let contactNumber=user.mobileNumber;
+
+
+
+let candidateDetails=await userDetail.findOne({userId:candidateId});
+
+
+if(!candidateDetails) throw new ApiError(httpStatus.NOT_FOUND,'candidate details not found');
+
+
+let name=candidateDetails.firstName;
+
+body.name=name;
+body.contactNumber=contactNumber;
+body.email=email;
+
+
+
+let newRecord=await contactUs.create(body);
+
+if(!newRecord) throw new ApiError(httpStatus.NOT_FOUND,'record is not inserted');
+
+let to="kmgarora61@gmail.com";
+//let to="krishna.gopal@appdesign.ie";
+let subject=body.subject;
+let text=body.message;
+
+
+let transporter = nodemailer.createTransport({
+  host:config.email.smtp.host,
+  port:config.email.smtp.port,
+  auth:config.email.smtp.auth
+
+});
+
+
+let mailOptions = {
+  from: email,
+  to: to,
+  subject: subject,
+  text: text
+};
+
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
+
+
+return newRecord;
+}
+
+if(user.role==="client")
+{
+
+if(user.emailVerified===false) throw new ApiError(httpStatus.UNAUTHORIZED, 'email of the client is not verified');
+
+
+let clientId=user._id;
+let email=user.email;
+
+let contactNumber=user.mobileNumber;
+
+
+
+let clientDetails=await userDetail.findOne({userId:clientId});
+
+
+if(!clientDetails) throw new ApiError(httpStatus.NOT_FOUND,'candidate details not found');
+
+
+let name=clientDetails.firstName;
+
+body.name=name;
+body.contactNumber=contactNumber;
+body.email=email;
+
+
+
+let newRecord=await contactUs.create(body);
+
+if(!newRecord) throw new ApiError(httpStatus.NOT_FOUND,'record is not inserted');
+
+let to="kmgarora61@gmail.com";
+//let to="krishna.gopal@appdesign.ie";
+let subject=body.subject;
+let text=body.message;
+
+
+let transporter = nodemailer.createTransport({
+  host:config.email.smtp.host,
+  port:config.email.smtp.port,
+  auth:config.email.smtp.auth
+});
+
+ let from=config.email.from;
+
+let mailOptions = {
+  from: from,
+  to: to,
+  subject: subject,
+  text: text
+};
+
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
+
+
+return newRecord;
+}
+
+}
+
+
+
+
 module.exports = {
   transport,
   sendEmail,
   sendResetPasswordEmail,
   sendVerificationEmail,
+  contactUsForInformation
 };
