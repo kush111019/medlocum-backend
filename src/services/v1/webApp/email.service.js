@@ -88,7 +88,7 @@ if(user.role=="candidate")
   console.log(body);
   let newRecord=await contactUs.create(body);
   
-  if(!newRecord) throw new ApiError(httpStatus.NOT_FOUND,'record is not inserted');
+  if(!newRecord) throw new ApiError(httpStatus.INTERNAL_SERVER,'record is not inserted');
   console.log("newRecord");
   console.log(newRecord);
   //let to="kmgarora61@gmail.com";
@@ -169,7 +169,7 @@ console.log("body");
 console.log(body);
 let newRecord=await contactUs.create(body);
 
-if(!newRecord) throw new ApiError(httpStatus.NOT_FOUND,'record is not inserted');
+if(!newRecord) throw new ApiError(httpStatus.INTERNAL_SERVER,'record is not inserted');
 console.log("newRecord");
 console.log(newRecord);
 //let to="kmgarora61@gmail.com";

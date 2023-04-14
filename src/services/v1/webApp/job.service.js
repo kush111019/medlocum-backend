@@ -216,7 +216,7 @@ const updateJobRequest=async(user,body)=>{
   
   let jobRequestIdExists=await jobRequest.findById({_id:jobRequestId});
 
-  if(!jobRequestIdExists) throw new ApiError(httpStatus.NOT,'no record is found with this jobRequestId');
+  if(!jobRequestIdExists) throw new ApiError(httpStatus.NOT_FOUND,'no record is found with this jobRequestId');
 
   let clientIdFromJobRequest=jobRequestIdExists.clientId.toString();
   let candidateIdFromJobRequest=jobRequestIdExists.candidateId.toString();
@@ -233,7 +233,7 @@ const updateJobRequest=async(user,body)=>{
 
 const deleteJobRequest=async(user,body)=>{
 
-if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND,'user is not a client');
+if(user.role!="client") throw new ApiError(httpStatus.UNAUTHORIZED,'user is not a client');
 
 let clientId=user._id;
 
@@ -241,7 +241,7 @@ let{jobRequestId,candidateId,jobId}=body;
 
 let clientExists=await User.findById({_id:clientId});
 
-if(!clientExists) throw new ApiError(httpStatus.NOT,'Client is not registered');
+if(!clientExists) throw new ApiError(httpStatus.NOT_FOUND,'Client is not registered');
 
 let candidateExistsInRecords=await User.findById({_id:candidateId});
 
@@ -429,7 +429,7 @@ return favouriteCandidateById;
 
 const createFavouriteJob=async(clientId,user,jobId,createdAt,updatedAt)=>{
  
-if(user.role!="candidate") throw new ApiError(httpStatus.NOT_FOUND, 'user is not candidate');
+if(user.role!="candidate") throw new ApiError(httpStatus.UNAUTHORIZED, 'user is not candidate');
 
 let candidateId=user._id;
 
@@ -470,7 +470,7 @@ return data;
 
 const deleteFavouriteJob=async(user,jobId,favouriteJobId,clientId)=>{
 
- if(user.role!="candidate") throw new ApiError(httpStatus.NOT_FOUND, 'user is not a candidate');
+ if(user.role!="candidate") throw new ApiError(httpStatus.UNAUTHORIZED, 'user is not a candidate');
 
  let candidateId=user._id;
 
@@ -518,7 +518,7 @@ return favouriteJobExists;
 const createFavouriteCandidate=async(user,candidateId,createdAt,updatedAt)=>
 
 {
-if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND, 'user is not a client');
+if(user.role!="client") throw new ApiError(httpStatus.UNAUTHORIZED, 'user is not a client');
 
 let clientId=user._id;
 
@@ -548,7 +548,7 @@ return data;
 
 const deleteFavouriteCandidate=async(user,candidateId,favouriteCandidateId)=>{
 
-  if(user.role!="client") throw new ApiError(httpStatus.NOT_FOUND, 'user is not a client');
+  if(user.role!="client") throw new ApiError(httpStatus.UNAUTHORIZED, 'user is not a client');
 
   let clientId=user._id;
 

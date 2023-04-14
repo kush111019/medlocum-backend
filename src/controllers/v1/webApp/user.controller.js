@@ -287,15 +287,15 @@ const matchedClientsForCandidateHomePage=catchAsync(async(req,res)=>{
   searchArguments.push(specialityRequired);
   searchArguments.push(cityRequired);
   let data1=await userService.matchedClientsForCandidateHomePage(user,...searchArguments);
-//  res.status(200).send({status:true,message:data1})
-  res.sendJSONResponse({
+  res.status(200).send({status:true,message:data1})
+//   res.sendJSONResponse({
    
-   code:httpStatus.OK,
-   status: true,
-   message: utility.getWebAppMessages('jobMessage.ClientRecommendedForCandidateSuccess'),
-   results: data1
+//    code:httpStatus.OK,
+//    status: true,
+//    message: utility.getWebAppMessages('jobMessage.ClientRecommendedForCandidateSuccess'),
+//    results: data1
  
- })
+//  })
 
   
  

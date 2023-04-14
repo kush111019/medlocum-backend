@@ -306,27 +306,28 @@ for(let i=0;i<bestMatches.length;i++)
 
  }
 
+ 
 
 
- let savedClients=bestMatches;
-//  if(bestMatches.length){  
-//  bestMatches.length=bestMatches.length-1;
-//  }
+  let savedClients=bestMatches;
+ if(bestMatches.length){  
+ bestMatches.length=bestMatches.length-1;
+ }
 
-//  if(mostRecent.length){
-//  mostRecent.length=mostRecent.length-1;
-//  }
-//  console.log(mostRecent.length);
-//  if(savedClients.length){
-//  savedClients.length=savedClients.length-1;
-//  }
-//  console.log(mostRecent.length);
+ if(mostRecent.length){
+ mostRecent.length=mostRecent.length-1;
+ }
+ 
+ if(savedClients.length){
+ savedClients.length=savedClients.length-1;
+ }
+ 
 //  bestMatches=bestMatches.splice(0,30);
 //  mostRecent=mostRecent.splice(0,30);
-
+//savedClients=savedClients.splice(0,30);
 let recommendedClients=new Object();
 
-recommendedClients.intro="Browse candidates that match your requirements and job preferences.Ordered by most relevant";
+recommendedClients.intro="Browse jobs that match your experience and selected preferences.Order by most relevant";
 
 recommendedClients.bestMatches=bestMatches;
 recommendedClients.mostRecent=mostRecent;
@@ -495,12 +496,22 @@ for(let i=0;i<bestMatches.length;i++)
 
  }
 
- savedCandidate=bestMatches;
-//  bestMatches.length=bestMatches.length-1;
-//  mostRecent.length=mostRecent.length-1;
-//  savedCandidate.length=savedCandidate.length-1;
-//  bestMatches.splice(0,10);
-//  mostRecent.splice(0,10);
+ savedCandidates=bestMatches;
+ if(bestMatches.length){  
+  bestMatches.length=bestMatches.length-1;
+  }
+ 
+  if(mostRecent.length){
+  mostRecent.length=mostRecent.length-1;
+  }
+  
+  if(savedCandidates.length){
+  savedCandidates.length=savedCandidates.length-1;
+  }
+  
+ //  bestMatches=bestMatches.splice(0,30);
+ //  mostRecent=mostRecent.splice(0,30);
+ //savedCandidates=savedCandidates.splice(0,30);
  
 
 let recommendedCandidates=new Object();
@@ -509,7 +520,7 @@ recommendedCandidates.intro="Browse candidates that match your requirements and 
 
 recommendedCandidates.bestMatches=bestMatches;
 recommendedCandidates.mostRecent=mostRecent;
-recommendedCandidates.savedCandidates=savedCandidate;
+recommendedCandidates.savedCandidates=savedCandidates;
 
 
 let newObject=new Object();
@@ -1200,11 +1211,21 @@ if(jobTypeRequired!==undefined){
 
  }
 }
-//  bestMatches.length=bestMatches.length-1;
-//  mostRecent.length=mostRecent.length-1;
-//  savedCandidates.length=savedCandidates.length-1;
-//  bestMatches.splice(0,10);
-//  mostRecent.splice(0,10);
+if(bestMatches.length){  
+  bestMatches.length=bestMatches.length-1;
+  }
+ 
+  if(mostRecent.length){
+  mostRecent.length=mostRecent.length-1;
+  }
+  
+  if(savedCandidates.length){
+  savedCandidates.length=savedCandidates.length-1;
+  }
+  
+ //  bestMatches=bestMatches.splice(0,30);
+ //  mostRecent=mostRecent.splice(0,30);
+ //savedCandidates=savedCandidates.splice(0,30);
 
  recommendedCandidates.intro="Browse candidates that match your requirements and job preferences.Ordered by most relevant";
 
