@@ -3,9 +3,9 @@ const Joi = require('joi');
 
 const contactUs = {
     body: Joi.object().keys({
-        
+    
     subject: Joi.string().required(),
-    message: Joi.string().required(),
+    description: Joi.string().required(),
     enquiryType: Joi.string().valid("Dispute"),
 
     })
