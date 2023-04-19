@@ -60,7 +60,8 @@ If you did not create an account, then ignore this email.`;
 };
 
 const contactUsForInformation = async(body,user) => {
-
+let newRecord;
+let mailOptions;
 if(user.role=="candidate")  
 {
   if(user.emailVerified===false) throw new ApiError(httpStatus.UNAUTHORIZED, 'email of the client is not verified');
@@ -84,13 +85,7 @@ if(user.role=="candidate")
   body.email=email;
   body.type=user.role;
   
-  console.log("body");
-  console.log(body);
-  let newRecord=await contactUs.create(body);
-  
-  if(!newRecord) throw new ApiError(httpStatus.INTERNAL_SERVER,'record is not inserted');
-  console.log("newRecord");
-  console.log(newRecord);
+
   //let to="kmgarora61@gmail.com";
   //let to="krishna.gopal@appdesign.ie";
   let subject=body.subject;
@@ -118,16 +113,28 @@ if(user.role=="candidate")
    text.description=body.description;
    text.dateAndTime=date;
   
-   text=text.toString();
-  
-  let mailOptions = {
+   //text=text.toString();
+   //let buffer=Buffer.from(text);
+   //text=JSON.stringify(text);
+
+   mailOptions = {
     from: from,
     to: to,
     subject: subject,
-    text: text
+    context: {
+      name:text.nameOfTheUser,
+      email:text.emailOfTheUser,
+      contact:text.contact,
+      userType:text.typeOfTheUser,
+      subject:text.subject,
+      enquiryType:text.enquiryType,
+      description:text.description,
+      dateAndTime:text.dateAndTime
+    }
   };
-  
-  
+
+  console.log("mailOptions");
+  console.log(mailOptions);
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
       console.log(error);
@@ -136,8 +143,11 @@ if(user.role=="candidate")
     }
   });
   
+  newRecord=await contactUs.create(body);
   
-  return newRecord;
+  if(!newRecord) throw new ApiError(httpStatus.INTERNAL_SERVER,'record is not inserted');
+  
+  //return newRecord;
 
 }
 
@@ -165,13 +175,11 @@ body.name=name;
 body.email=email;
 body.type=user.role;
 
-console.log("body");
-console.log(body);
-let newRecord=await contactUs.create(body);
+newRecord=await contactUs.create(body);
 
 if(!newRecord) throw new ApiError(httpStatus.INTERNAL_SERVER,'record is not inserted');
-console.log("newRecord");
-console.log(newRecord);
+// console.log("newRecord");
+// console.log(newRecord);
 //let to="kmgarora61@gmail.com";
 //let to="krishna.gopal@appdesign.ie";
 let subject=body.subject;
@@ -200,14 +208,24 @@ let transporter = nodemailer.createTransport({
  text.dateAndTime=date;
 
  text=text.toString();
+ //text=JSON.stringify(text);
 
-let mailOptions = {
+ mailOptions = {
   from: from,
   to: to,
   subject: subject,
-  text: text
+  context: {
+    name:text.nameOfTheUser,
+    email:text.emailOfTheUser,
+    contact:text.contact,
+    userType:text.typeOfTheUser,
+    subject:text.subject,
+    enquiryType:text.enquiryType,
+    description:text.description,
+    dateAndTime:text.dateAndTime
+  }
 };
-
+ 
 
 transporter.sendMail(mailOptions, function(error, info){
   if (error) {
@@ -218,8 +236,10 @@ transporter.sendMail(mailOptions, function(error, info){
 });
 
 
-return newRecord;
+//return newRecord;
 }
+console.log("mailOptions");
+console.log(mailOptions);
 
 }
 

@@ -149,7 +149,7 @@ const candidateHomePage = async (user) => {
  let jobCategory=candidatePreferenceData.jobCategory;
  let header=new Object();
  header.speciality=speciality;;
- header.country=country;
+ header.county=country;
  header.availability=availability;
  let section=new Object();
    
@@ -257,7 +257,7 @@ for(let i=0;i<jobDetailsId.length;i++){
       let myClientPreferences=await Perefrence.findOne({userId:clientId}).select({speciality:1});
 
       if(myClientPreferences!==null && myClientPreferences!==undefined){
-        console.log("hello world");
+        
         let EstBudget=jobDetails.salaryRange;
 
         let speciality=myClientPreferences.speciality;
@@ -335,7 +335,7 @@ recommendedClients.savedClients=savedClients;
 
 let newObject=new Object();
 newObject.header=header;
-newObject.section=section;
+//newObject.section=section;
 newObject.recommendedCandidates=recommendedClients;
 
 
@@ -374,7 +374,7 @@ const clientHomePage = async (user) => {
  let jobCategory=clientPreferenceData.jobCategory;
  let header=new Object();
  header.speciality=speciality;;
- header.country=country;
+ header.county=country;
  header.availability=availability;
  let section=new Object();
    
@@ -525,7 +525,7 @@ recommendedCandidates.savedCandidates=savedCandidates;
 
 let newObject=new Object();
 newObject.header=header;
-newObject.section=section;
+//newObject.section=section;
 newObject.recommendedCandidates=recommendedCandidates;
 
 
@@ -567,7 +567,7 @@ const matchedCandidatesForClientHomePage = async function(user,...searchParamete
  let jobCategory=clientPreferenceData.jobCategory;
  let header=new Object();
  header.speciality=speciality;;
- header.country=country;
+ header.county=country;
  header.availability=availability;
  let section=new Object();
    
@@ -1324,7 +1324,7 @@ finalMostRecent[i].updatedAt=newMostRecent.updatedAt;
 
     let homePageOfClient=new Object();
     homePageOfClient.header=header;
-    homePageOfClient.section=section;
+   //homePageOfClient.section=section;
     homePageOfClient.recommendedCandidates=recommendedCandidates;
 
     return homePageOfClient;
@@ -1403,7 +1403,7 @@ finalMostRecent[i].updatedAt=newMostRecent.updatedAt;
   }
  let homePageOfClient=new Object();
  homePageOfClient.header=header;
- homePageOfClient.section=section;
+ //homePageOfClient.section=section;
  homePageOfClient.recommendedCandidates=recommendedCandidates;
 
  return homePageOfClient;
@@ -1443,7 +1443,7 @@ finalMostRecent[i].updatedAt=newMostRecent.updatedAt;
  let jobCategory=candidatePreferenceData.jobCategory;
  let header=new Object();
  header.speciality=speciality;;
- header.country=country;
+ header.county=country;
  header.availability=availability;
  let section=new Object();
    
@@ -2350,7 +2350,7 @@ for(let i=0;i<newMostRecent.length;i++)
 
     let homePageOfCandidate=new Object();
     homePageOfCandidate.header=header;
-    homePageOfCandidate.section=section;
+    //homePageOfCandidate.section=section;
     homePageOfCandidate.recommendedClients=recommendedClients;
 
 
@@ -2439,7 +2439,7 @@ for(let i=0;i<newMostRecent.length;i++)
   }
  let homePageOfClient=new Object();
  homePageOfClient.header=header;
- homePageOfClient.section=section;
+ //homePageOfClient.section=section;
  homePageOfClient.recommendedClients=recommendedClients;
 
  return homePageOfClient;

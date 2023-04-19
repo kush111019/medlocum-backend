@@ -13,6 +13,9 @@ let user=req.user;
 
 let data1=emailService.contactUsForInformation(body,user);
 
+console.log("data1");
+console.log(data1)
+
 res.sendJSONResponse({
     code: httpStatus.OK,
     status: true,
@@ -21,8 +24,5 @@ res.sendJSONResponse({
 
 
 })
-
-
-
 
  module.exports = {contactUs};
