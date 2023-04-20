@@ -121,20 +121,16 @@ if(user.role=="candidate")
     from: from,
     to: to,
     subject: subject,
-    context: {
-      name:text.nameOfTheUser,
-      email:text.emailOfTheUser,
-      contact:text.contact,
-      userType:text.typeOfTheUser,
-      subject:text.subject,
-      enquiryType:text.enquiryType,
-      description:text.description,
-      dateAndTime:text.dateAndTime
-    }
+    html: `You have received a new contact enquiry from ${name}.The enquiry information,as below.<br>
+    email: ${email}<br>
+    contact: ${contact}<br>
+    typeOfTheUser: ${user.type}<br>
+    subject: ${body.subject}<br>
+    enquiryType: ${body.enquiryType}<br>
+    description: ${body.description}<br>
+    dateAndTime: ${date}<br>`
   };
 
-  console.log("mailOptions");
-  console.log(mailOptions);
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
       console.log(error);
@@ -207,23 +203,31 @@ let transporter = nodemailer.createTransport({
  text.description=body.description;
  text.dateAndTime=date;
 
- text=text.toString();
+//  text=text.toString();
  //text=JSON.stringify(text);
 
  mailOptions = {
   from: from,
   to: to,
   subject: subject,
-  context: {
-    name:text.nameOfTheUser,
-    email:text.emailOfTheUser,
-    contact:text.contact,
-    userType:text.typeOfTheUser,
-    subject:text.subject,
-    enquiryType:text.enquiryType,
-    description:text.description,
-    dateAndTime:text.dateAndTime
-  }
+  html: `You have received a new contact enquiry from ${name}.The enquiry information,as below.<br>
+  email: ${email}<br>
+  contact: ${contact}<br>
+  typeOfTheUser: ${user.type}<br>
+  subject: ${body.subject}<br>
+  enquiryType: ${body.enquiryType}<br>
+  description: ${body.description}<br>
+  dateAndTime: ${date}<br>`
+  // message: {
+  //   name:text.nameOfTheUser,
+  //   email:text.emailOfTheUser,
+  //   contact:text.contact,
+  //   userType:text.typeOfTheUser,
+  //   subject:text.subject,
+  //   enquiryType:text.enquiryType,
+  //   description:text.description,
+  //   dateAndTime:text.dateAndTime
+  // }
 };
  
 
@@ -238,8 +242,6 @@ transporter.sendMail(mailOptions, function(error, info){
 
 //return newRecord;
 }
-console.log("mailOptions");
-console.log(mailOptions);
 
 }
 

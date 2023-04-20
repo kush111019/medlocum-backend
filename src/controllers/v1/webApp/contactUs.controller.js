@@ -20,6 +20,7 @@ res.sendJSONResponse({
     code: httpStatus.OK,
     status: true,
     message: utility.getWebAppMessages('contactUs.emailSentSuccess'),
+    data:{result:data1}
   });
 
 
