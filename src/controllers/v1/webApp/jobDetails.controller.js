@@ -166,5 +166,17 @@ res.sendJSONResponse({
 
 })
 
+const compressImage =  async function(req,res){
+
+let user=req.user;
+let imageFile=req.files;
+console.log(imageFile);
+
+let images = await jobService.compressImage(user,imageFile);
+
+return res.status(200).send({status:success,data:images});
+
+}
+
   
-module.exports={createJobDetails,updateJobDetails,deleteJobDetails,filterJobDetails,saveJobForCandidate,getJobListForBoth};
+module.exports={createJobDetails,updateJobDetails,deleteJobDetails,filterJobDetails,saveJobForCandidate,getJobListForBoth,compressImage};

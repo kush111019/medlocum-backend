@@ -11,6 +11,7 @@ const favouriteCandidateRoute=require('./favouriteCandidate.route');
 const specificUserRoute=require('./specificUser.route');
 const contactUsRoute=require('./contactUs.route');
 const jobRoute = require('./job.route');
+const imageRoute=require("./image.route");
 
 const router = express.Router();
 
@@ -57,7 +58,12 @@ const defaultRoutes = [
   {
     path:'/contactUs',
     route:contactUsRoute,
+  },
+  {
+    path: '/imageUpload',
+    route:imageRoute
   }
+  
 ];
 
 const devRoutes = [

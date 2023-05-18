@@ -581,4 +581,23 @@ const deleteFavouriteCandidate=async(user,candidateId,favouriteCandidateId)=>{
 }
 
 
-module.exports={saveJobDetails,getJobDetailsById,updateJobDetails,deleteJobDetails,createJobRequest,updateJobRequest,deleteJobRequest,filteredJobDetails,deleteFavouriteJob,deleteFavouriteCandidate,createFavouriteCandidate,createFavouriteJob,getJobDetailsForBoth};
+const compressImage = async function(user,imageFile){
+
+  fs.access("./uploads", (error) => {
+    if (error) {
+      fs.mkdirSync("./uploads");
+    }
+  });
+  const { buffer, originalname } = imageFile;
+  const timestamp = new Date().toISOString();
+  const ref = `${timestamp}-${originalname}.webp`;
+  await sharp(buffer)
+    .webp({ quality: 20 })
+    .toFile("./uploads/" + ref);
+  const link = `http://localhost:3000/${ref}`;
+  return res.json({ link });
+
+}
+
+
+module.exports={saveJobDetails,getJobDetailsById,updateJobDetails,deleteJobDetails,createJobRequest,updateJobRequest,deleteJobRequest,filteredJobDetails,deleteFavouriteJob,deleteFavouriteCandidate,createFavouriteCandidate,createFavouriteJob,getJobDetailsForBoth,compressImage};
